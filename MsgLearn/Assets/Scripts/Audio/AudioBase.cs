@@ -1,0 +1,35 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+public class AudioBase : MonoBase
+{
+    /// <summary>
+    /// 自身关心的消息集合
+    /// </summary>
+    List<int> list = new List<int>();
+    /// <summary>
+    /// 绑定一个或多个消息
+    /// </summary>
+    /// <param name="eventCodes">Event codes.</param>
+    protected void Bind(params int[] eventCodes)
+    {
+        list.AddRange(eventCodes);
+        AudioManager.Instance.Add(list.ToArray(), this);
+    }
+    /// <summary>
+    /// 接触绑定的消息
+    /// </summary>
+    protected void UnBind()
+    {
+        AudioManager.Instance.Remove(list.ToArray(), this);
+        list.Clear();
+    }
+    /// <summary>
+    /// 自动移除绑定的消息
+    /// </summary>
+    public  virtual void OnDestroy()
+    {
+        if (list != null)
+            UnBind();
+    }
+}
